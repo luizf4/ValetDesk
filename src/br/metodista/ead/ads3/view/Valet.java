@@ -31,11 +31,11 @@ public class Valet extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextFieldModelo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldPlaca = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabelValor = new javax.swing.JLabel();
         jLabelEntrada = new javax.swing.JLabel();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanelDados = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableDados = new javax.swing.JTable();
@@ -69,9 +69,7 @@ public class Valet extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setText("Placa:");
         jPanelPainel.add(jLabel2);
-        jLabel2.setBounds(310, 50, 41, 19);
-        jPanelPainel.add(jTextFieldPlaca);
-        jTextFieldPlaca.setBounds(330, 70, 180, 30);
+        jLabel2.setBounds(370, 50, 41, 19);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Entrada:");
@@ -94,6 +92,16 @@ public class Valet extends javax.swing.JFrame {
         jLabelEntrada.setOpaque(true);
         jPanelPainel.add(jLabelEntrada);
         jLabelEntrada.setBounds(30, 130, 180, 30);
+
+        try {
+            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jFormattedTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jFormattedTextField1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jPanelPainel.add(jFormattedTextField1);
+        jFormattedTextField1.setBounds(390, 70, 120, 40);
 
         jPanelDados.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 18))); // NOI18N
         jPanelDados.setLayout(null);
@@ -237,6 +245,7 @@ public class Valet extends javax.swing.JFrame {
     private javax.swing.JButton jButtonFechar;
     private javax.swing.JButton jButtonFinalizar;
     private javax.swing.JButton jButtonNovo;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -248,6 +257,5 @@ public class Valet extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableDados;
     private javax.swing.JTextField jTextFieldModelo;
-    private javax.swing.JTextField jTextFieldPlaca;
     // End of variables declaration//GEN-END:variables
 }

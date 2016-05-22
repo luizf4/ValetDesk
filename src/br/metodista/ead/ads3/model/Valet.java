@@ -4,7 +4,9 @@ import java.util.Date;
 
 /**
  *
- * @author Luiz Fernando de Souza Matricula: 225272 ADS - EAD - Polo Sorocaba
+ * @author Luiz Fernando de Souza 
+ * Matricula: 225272 
+ * ADS - EAD - Polo Sorocaba
  */
 public class Valet {
 

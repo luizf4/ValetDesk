@@ -15,7 +15,9 @@ import br.metodista.ead.ads3.model.Valet;
 
 /**
  *
- * @author Luiz Fernando de Souza Matricula: 225272 ADS - EAD - Polo Sorocaba
+ * @author Luiz Fernando de Souza 
+ * Matricula: 225272 
+ * ADS - EAD - Polo Sorocaba
  */
 public class ValetTableModel extends AbstractTableModel {
 

@@ -1,21 +1,26 @@
 package br.metodista.ead.ads3.view;
 
 import javax.swing.JOptionPane;
+import br.metodista.ead.ads3.model.Valet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Luiz Fernando de Souza
- * Matricula: 225272
- * ADS - EAD - Polo Sorocaba
+ * @author Luiz Fernando de Souza Matricula: 225272 ADS - EAD - Polo Sorocaba
  */
-public class Valet extends javax.swing.JFrame {
+public class ValetTela extends javax.swing.JFrame {
 
+    private Valet selecionado = null;
     private ValetTableModel modeloValet = new ValetTableModel();
-   
-    public Valet() {
-        initComponents();       
-        
-        
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    public ValetTela() {
+        initComponents();
+
     }
 
     /**
@@ -31,11 +36,11 @@ public class Valet extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextFieldModelo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldPlaca = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabelValor = new javax.swing.JLabel();
         jLabelEntrada = new javax.swing.JLabel();
+        jFormattedTextFieldPlaca = new javax.swing.JFormattedTextField();
         jPanelDados = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableDados = new javax.swing.JTable();
@@ -69,9 +74,7 @@ public class Valet extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setText("Placa:");
         jPanelPainel.add(jLabel2);
-        jLabel2.setBounds(310, 50, 41, 19);
-        jPanelPainel.add(jTextFieldPlaca);
-        jTextFieldPlaca.setBounds(330, 70, 180, 30);
+        jLabel2.setBounds(360, 50, 41, 19);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Entrada:");
@@ -95,6 +98,16 @@ public class Valet extends javax.swing.JFrame {
         jPanelPainel.add(jLabelEntrada);
         jLabelEntrada.setBounds(30, 130, 180, 30);
 
+        try {
+            jFormattedTextFieldPlaca.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("AAA-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jFormattedTextFieldPlaca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jFormattedTextFieldPlaca.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jPanelPainel.add(jFormattedTextFieldPlaca);
+        jFormattedTextFieldPlaca.setBounds(370, 70, 140, 30);
+
         jPanelDados.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 18))); // NOI18N
         jPanelDados.setLayout(null);
 
@@ -102,6 +115,11 @@ public class Valet extends javax.swing.JFrame {
         jTableDados.setModel(modeloValet);
         jTableDados.setColumnSelectionAllowed(true);
         jTableDados.getTableHeader().setReorderingAllowed(false);
+        jTableDados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableDadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableDados);
         jTableDados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (jTableDados.getColumnModel().getColumnCount() > 0) {
@@ -114,10 +132,25 @@ public class Valet extends javax.swing.JFrame {
         jScrollPane1.setBounds(10, 30, 520, 300);
 
         jButtonAdicionar.setText("Adicionar");
+        jButtonAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarActionPerformed(evt);
+            }
+        });
 
         jButtonFinalizar.setText("Finalizar");
+        jButtonFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFinalizarActionPerformed(evt);
+            }
+        });
 
         jButtonNovo.setText("Novo");
+        jButtonNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNovoActionPerformed(evt);
+            }
+        });
 
         jButtonFechar.setText("Fechar");
         jButtonFechar.addActionListener(new java.awt.event.ActionListener() {
@@ -169,11 +202,12 @@ public class Valet extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFecharActionPerformed
-        
+
         Object[] options = {"Sim", "Não"};
 
         if (JOptionPane.showOptionDialog(this, "Deseja Sair?", "Atenção",
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == JOptionPane.YES_OPTION) {
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                options, options[1]) == JOptionPane.YES_OPTION) {
 
             dispose();
 
@@ -181,10 +215,57 @@ public class Valet extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonFecharActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        
+
         jButtonFecharActionPerformed(null);
-        
+
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButtonAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarActionPerformed
+
+        Valet v = new Valet(jTextFieldModelo.getText(),
+                jFormattedTextFieldPlaca.getText(), new Date());
+        try {
+            modeloValet.adicionar(v);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        limparCampos();
+        jTextFieldModelo.grabFocus();
+
+    }//GEN-LAST:event_jButtonAdicionarActionPerformed
+
+    private void jTableDadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDadosMouseClicked
+
+        Valet v = modeloValet.getValet(jTableDados.getSelectedRow());
+        v.setSaida(new Date());
+        jTextFieldModelo.setText(v.getModelo());
+        jFormattedTextFieldPlaca.setText(v.getPlaca());
+        jLabelEntrada.setText(df.format(v.getEntrada()));
+        //a data e hora de saida ocorre no evento click da tabela.
+        v.setValor(calcularPreco(v.getEntrada(), v.getSaida()));
+        jLabelValor.setText("R$ " + String.valueOf(v.getValor()));
+        selecionado = v;
+
+
+    }//GEN-LAST:event_jTableDadosMouseClicked
+
+    private void jButtonNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoActionPerformed
+
+        limparCampos();
+        jTextFieldModelo.grabFocus();
+
+    }//GEN-LAST:event_jButtonNovoActionPerformed
+
+    private void jButtonFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFinalizarActionPerformed
+
+        try {
+            modeloValet.remover(selecionado);
+        } catch (Exception ex) {
+            Logger.getLogger(ValetTela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        limparCampos();
+
+    }//GEN-LAST:event_jButtonFinalizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,40 +284,43 @@ public class Valet extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Valet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ValetTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Valet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ValetTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Valet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ValetTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Valet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ValetTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Valet().setVisible(true);
-               
+                new ValetTela().setVisible(true);
+
             }
         });
     }
-    
-    private void carregar(){
-        
-        
-        
+
+    private void limparCampos() {
+
+        jTextFieldModelo.setText("");
+        jFormattedTextFieldPlaca.setText("");
+        jLabelEntrada.setText("");
+        jLabelValor.setText("");
+        selecionado = null;
+
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionar;
     private javax.swing.JButton jButtonFechar;
     private javax.swing.JButton jButtonFinalizar;
     private javax.swing.JButton jButtonNovo;
+    private javax.swing.JFormattedTextField jFormattedTextFieldPlaca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -248,6 +332,27 @@ public class Valet extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableDados;
     private javax.swing.JTextField jTextFieldModelo;
-    private javax.swing.JTextField jTextFieldPlaca;
     // End of variables declaration//GEN-END:variables
+
+    private Double calcularPreco(Date entrada, Date saida) {
+
+        //variavel saida declarada para que no momento da seleção do registro
+        //a data e hora entrem no calculo de imediato e não após
+        //o evento do botão finalizar
+        long diferenca = saida.getTime() - entrada.getTime(); //em milissegundos
+        //Tempo em milissegundos divido por 1000 retorna segundos
+        //dividindo segundos por 60 retorna minutos
+        //dividindo minutos por 60 retorna hora
+        int horas = (int) (diferenca / 1000 / 60 / 60);
+        int minutos = (int) (diferenca / 1000 / 60);
+
+        double total = horas * 3;
+        if (minutos != 0) {
+
+            total += 3;
+
+        }
+
+        return total;
+    }
 }

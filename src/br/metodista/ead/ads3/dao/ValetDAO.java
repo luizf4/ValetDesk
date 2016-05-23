@@ -7,8 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
+import oracle.sql.TIMESTAMP;
 
 /**
  *
@@ -82,6 +83,7 @@ public class ValetDAO {
                     stm.setLong(1, valet.getId());
                     stm.setString(2, valet.getModelo());
                     stm.setString(3, valet.getPlaca());
+                    //stm.setDate(4, new java.sql.Date(valet.getEntrada().getTime()));
                     stm.setTimestamp(4,
                             new java.sql.Timestamp(valet.getEntrada().getTime()));
 
@@ -167,12 +169,91 @@ public class ValetDAO {
 
                 stm.close();
             }
-            
+
             desconectar(conn);
         }
 
         return valets;
-        
+
     }
 
+    public List<Valet> consultarTodos() throws Exception {
+
+        List<Valet> valets = new ArrayList();
+        Connection conn = conectar();
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            String consultar = "SELECT * FROM Valet order by Entrada";
+            pstm = conn.prepareStatement(consultar);
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+
+                Date saida = rs.getDate("saida");
+
+                Valet v = new Valet(rs.getLong("id"), rs.getString("modelo"),
+                        rs.getString("placa"),
+                        new java.util.Date(rs.getDate("entrada").getTime()),
+                        //se saida for diferente de nulo, mostra saida,
+                        //caso contrario, retorna nulo.
+                        saida != null ? new java.util.Date(rs.getDate("saida").getTime()) : null,
+                        rs.getDouble("preco"));
+
+                valets.add(v);
+
+            }
+        } catch (SQLException ex) {
+
+            ex.printStackTrace();
+
+        } finally {
+
+            if (rs != null) {
+                rs.close();
+
+            }
+            if (pstm != null) {
+
+                pstm.close();
+            }
+
+            desconectar(conn);
+        }
+
+        return valets;
+    }
+
+    public void atualizar(Valet v) throws Exception {
+
+        Connection conn = conectar();
+        PreparedStatement pstm = null;
+        
+        try {
+
+            String atualizar = "UPDATE Valet SET saida = ?, preco = ? "
+                    + "WHERE id = ?";
+            pstm = conn.prepareCall(atualizar);
+            pstm.setTimestamp(1, new java.sql.Timestamp(v.getSaida().getTime()));
+            pstm.setDouble(2, v.getValor());
+            pstm.setLong(3, v.getId());
+            pstm.executeUpdate();
+            desconectar(conn);
+
+        } catch (SQLException ex) {
+            
+            ex.printStackTrace();
+            
+            
+        } finally {
+
+            if (pstm != null) {
+
+                pstm.close();
+            }
+
+            desconectar(conn);
+
+        }
+    }
 }

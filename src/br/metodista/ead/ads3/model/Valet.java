@@ -20,11 +20,20 @@ public class Valet {
     public Valet() {
 
     }
+    
+    public Valet(Long id, String modelo, String placa, Date entrada) {
+        this.id = id;
+        this.modelo = modelo;
+        this.placa = placa;
+        this.entrada = entrada;
 
-    public Valet(String modelo, String placa) {
+    }
+
+    public Valet(String modelo, String placa, Date entrada) {
 
         this.modelo = modelo;
         this.placa = placa;
+        this.entrada = entrada;
 
     }
 
@@ -35,15 +44,7 @@ public class Valet {
         this.entrada = entrada;
         this.saida = saida;
         this.valor = valor;
-    }
-
-    public Valet(Long id, String modelo, String placa, Date entrada) {
-        this.id = id;
-        this.modelo = modelo;
-        this.placa = placa;
-        this.entrada = entrada;
-
-    }
+    }    
 
     public Long getId() {
         return id;

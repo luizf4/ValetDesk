@@ -15,21 +15,20 @@ import br.metodista.ead.ads3.model.Valet;
 
 /**
  *
- * @author Luiz Fernando de Souza 
- * Matricula: 225272 
- * ADS - EAD - Polo Sorocaba
+ * @author Luiz Fernando de Souza Matricula: 225272 ADS - EAD - Polo Sorocaba
  */
 public class ValetTableModel extends AbstractTableModel {
 
     private List<Valet> valets = new ArrayList<Valet>();
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    ValetDAO dao = new ValetDAO();
 
     public ValetTableModel() {
 
         try {
 
-            ValetDAO dao = new ValetDAO();
             valets = dao.consultarValetsGaragem();
+            //valets = dao.consultarTodos();
 
         } catch (Exception ex) {
 
@@ -103,17 +102,24 @@ public class ValetTableModel extends AbstractTableModel {
 
     }
 
-    public void adicionar(Valet v) {
-
+    public void adicionar(Valet v) throws Exception {
+        v = dao.salvar(v);
         valets.add(v);
         fireTableRowsInserted(valets.size() - 1, valets.size() - 1);
 
     }
 
-    public void remover(Valet v) {
-
+    public void remover(Valet v) throws Exception {
+        
+        dao.atualizar(v);
         valets.remove(v);
         fireTableRowsInserted(valets.size() - 1, valets.size() - 1);
+
+    }
+
+    public Valet getValet(int linha) {
+
+        return valets.get(linha);
 
     }
 

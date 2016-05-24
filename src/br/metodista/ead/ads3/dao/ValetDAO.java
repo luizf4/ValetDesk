@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
-import oracle.sql.TIMESTAMP;
 
 /**
  *
